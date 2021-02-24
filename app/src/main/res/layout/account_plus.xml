@@ -194,7 +194,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:background="@color/mainColor"
+        android:background="@drawable/round_button_main"
         android:text="계정 추가하기"
         android:textColor="@color/white"
         android:textSize="18sp"

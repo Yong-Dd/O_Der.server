@@ -5,4 +5,17 @@
         <item>추천 메뉴</item>
         <item>인기 메뉴</item>
     </string-array>
+    <string-array name="menuList">
+        <item>COFFEE</item>
+        <item>NON COFFEE</item>
+        <item>TEA</item>
+        <item>JUICE</item>
+        <item>DESSERT</item>
+    </string-array>
+    <string-array name="hotIceList">
+        <item>HOT/ICE</item>
+        <item>HOT ONLY</item>
+        <item>ICE ONLY</item>
+        <item>NONE(DESSERT)</item>
+    </string-array>
 </resources>
