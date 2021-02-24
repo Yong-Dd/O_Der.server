@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.716">
+
+        <!--cancel button-->
+        <ImageButton
+            android:id="@+id/L_xButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/ic_baseline_clear_24"
+            android:gravity="right"
+            app:backgroundTint="@color/black" />
+
+        <!--로고-->
+
+        <!--아이디 작성
+        textCursorDrawable(커서 색변경)-->
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/logo_base_color" />
+
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:backgroundTint="@color/mainColor"
+            android:ems="10"
+            android:hint="아이디(이메일)"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:textCursorDrawable="@drawable/cursor"
+            android:textSize="20sp" />
+
+        <!--비밀번호 작성
+        textCursorDrawable(커서 색변경)-->
+        <EditText
+            android:id="@+id/pwText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:ems="10"
+            android:hint="비밀번호"
+            android:inputType="textPassword"
+            android:textSize="20sp"
+            android:backgroundTint="@color/mainColor"
+            android:imeOptions="actionDone"
+            android:textCursorDrawable="@drawable/cursor"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!--로그인 버튼-->
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:background="@color/mainColor"
+            android:text="로그인"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:backgroundTint="#00000000"
+            app:backgroundTintMode="src_over" />
+
+        <!--회원가입 버튼-->
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loadingLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#4DFFFFFF"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=":Der"
+            android:textColor="@color/mainColor"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.529" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

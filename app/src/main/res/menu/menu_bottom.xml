@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuTab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_emoji_food_beverage_24"
+        android:title="메뉴관리"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/homeTab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="홈"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/accountTab"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="설정"
+        app:showAsAction="ifRoom" />
+
+</menu>

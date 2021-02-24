@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="bannerTitle">
+        <item>새로운 메뉴</item>
+        <item>추천 메뉴</item>
+        <item>인기 메뉴</item>
+    </string-array>
+</resources>

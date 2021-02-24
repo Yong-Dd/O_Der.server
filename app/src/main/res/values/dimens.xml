@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="MD_top_margin">10dp</dimen>
+    <dimen name="MD_allow_size">35dp</dimen>
+</resources>
