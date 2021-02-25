@@ -15,7 +15,7 @@
         android:title="홈"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/accountTab"
+        android:id="@+id/managementTab"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_settings_24"
         android:title="설정"

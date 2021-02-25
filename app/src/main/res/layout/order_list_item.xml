@@ -39,7 +39,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView32"
+                    android:id="@+id/O_customerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -48,7 +48,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/textView33"
+                    android:id="@+id/O_customerPhoneNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"

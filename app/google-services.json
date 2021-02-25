@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "1049174569998",
+    "firebase_url": "https://oder-e6555-default-rtdb.firebaseio.com",
+    "project_id": "oder-e6555",
+    "storage_bucket": "oder-e6555.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049174569998:android:781b2ee5c53ef6212bb85f",
+        "android_client_info": {
+          "package_name": "com.yongdd.o_der_re.server"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049174569998-s6es136957rn7aps1v1ngq34cn80us4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWdDsTQ7md91jFM-K5ddJ4wX8scdPMEMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049174569998-s6es136957rn7aps1v1ngq34cn80us4m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1049174569998-kofql9lbnf2fh3ei1rcq3fucub58ibd5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yongdd.oder"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049174569998:android:1d9835a9b7479b812bb85f",
+        "android_client_info": {
+          "package_name": "com.yongdd.oder_re"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049174569998-s6es136957rn7aps1v1ngq34cn80us4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWdDsTQ7md91jFM-K5ddJ4wX8scdPMEMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049174569998-s6es136957rn7aps1v1ngq34cn80us4m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1049174569998-kofql9lbnf2fh3ei1rcq3fucub58ibd5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yongdd.oder"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
