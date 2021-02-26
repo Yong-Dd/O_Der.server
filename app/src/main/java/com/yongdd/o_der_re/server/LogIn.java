@@ -70,7 +70,6 @@ public class LogIn extends AppCompatActivity {
                         proBar.setIndeterminate(true);
                         proBar.setIndeterminateTintList(ColorStateList.valueOf(Color.rgb(43,144,217)));
                     }
-
                     //로그인 진행
                     logIn(email,password);
                 }else{
@@ -91,6 +90,7 @@ public class LogIn extends AppCompatActivity {
     }
 
     private void logIn(String email, String password){
+
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -128,6 +128,7 @@ public class LogIn extends AppCompatActivity {
 
                                 }else{
                                     Log.d(TAG,"logIn failed");
+                                    loadingLayout.setVisibility(View.GONE);
                                     Toast.makeText(getApplicationContext(),"아이디와 비밀번호를 확인해주세요.",Toast.LENGTH_SHORT).show();
                                     return;
                                 }

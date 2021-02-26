@@ -1,6 +1,7 @@
 package com.yongdd.o_der_re.server;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,10 +24,15 @@ public class HomeFragment extends Fragment {
     RecyclerView orderListRecyclerView;
     OrderListAdapter orderListAdapter;
 
+    static ArrayList<OrderClient> orderClients = new ArrayList<>();
+    static int selectPosition;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_fragment,container,false);
+
+        selectPosition = -1;
 
         logInNameText = view.findViewById(R.id.loginNameText);
         noneOrderLayout = view.findViewById(R.id.noneOrderLayout);
@@ -37,7 +44,7 @@ public class HomeFragment extends Fragment {
         orderListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         setLogInName(MainActivity.name);
-        setOrderList(MainActivity.orderLists);
+        setList(MainActivity.orderLists);
 
         return view;
     }
@@ -46,20 +53,31 @@ public class HomeFragment extends Fragment {
         logInNameText.setText(name);
     }
 
-    public void setOrderList(ArrayList<OrderClient> orderLists){
+    public void setList(ArrayList<OrderClient> orderLists){
+
         if(orderLists.size()>0){
             setNoneOrder(false);
+            orderClients = orderLists;
+            setOrderList();
+        }else{
+            setNoneOrder(true);
+        }
+    }
 
-            for(OrderClient orderClient : orderLists){
+    public void setOrderList(){
+
+            orderListAdapter.clearItem();
+            for(OrderClient orderClient : orderClients){
                 orderListAdapter.addItem(orderClient);
                 orderListRecyclerView.setAdapter(orderListAdapter);
                 orderListAdapter.notifyDataSetChanged();
             }
-        }else{
-            setNoneOrder(true);
-        }
-
     }
+    public void getPosition(int position){
+        selectPosition = position;
+    }
+
+
 
     public void setNoneOrder(boolean none){
         if(none){
@@ -68,5 +86,39 @@ public class HomeFragment extends Fragment {
             noneOrderLayout.setVisibility(View.GONE);
         }
     }
+
+    public OrderClient getItems(){
+        OrderClient orderClient = orderListAdapter.getItem(selectPosition);
+        return orderClient;
+    }
+
+    public void acceptedOrderChange(OrderClient orderClient){
+
+        orderListAdapter.updateItem(selectPosition,orderClient);
+        orderListRecyclerView.setAdapter(orderListAdapter);
+        orderListAdapter.notifyItemChanged(selectPosition);
+    }
+
+    public void deleteOrder(int position){
+
+        orderListAdapter.deleteItem(position);
+        orderListRecyclerView.setAdapter(orderListAdapter);
+        orderListAdapter.notifyItemChanged(position);
+
+        orderClients.remove(position);
+        Log.d("delete Order","사이즈 "+orderClients.size());
+        if(orderClients.size()==0){
+            Log.d("delete Order","사이즈 0임");
+            setNoneOrder(false);
+            reloadView();
+        }
+    }
+
+    public void reloadView(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(HomeFragment.this).attach(HomeFragment.this).commitAllowingStateLoss();
+
+    }
+
 
 }

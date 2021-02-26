@@ -32,31 +32,56 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:background="@color/mainColor"
-                android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/mainColor"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/O_customerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="디디"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/O_customerPhoneNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:text="010-1234-5678"
+                        android:textColor="@color/white"
+                        android:textSize="18sp" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/O_customerName"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/O_orderMemo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="디디"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@color/lightColor"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="5dp"
+                    android:paddingBottom="10dp"
+                    android:text="얼음은 빼주세요!"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/O_customerPhoneNumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center"
-                    android:text="010-1234-5678"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -298,7 +323,8 @@
                     android:text="주문승인"
                     android:textColor="@color/mainColor"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
                 <android.widget.Button
                     android:id="@+id/O_orderCompletedButton"
@@ -309,7 +335,8 @@
                     android:text="주문완료"
                     android:textColor="@color/lightColor"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
 
         </LinearLayout>

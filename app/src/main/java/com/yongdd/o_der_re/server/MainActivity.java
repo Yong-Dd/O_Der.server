@@ -25,17 +25,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity  {
     ConstraintLayout loadingLayout;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -46,16 +44,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     static String name;
     static ArrayList<OrderClient> orderLists = new ArrayList<>();
+    ArrayList<UserId> users = new ArrayList<>();
     int orderListCount;
+    int UserCount;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);;
 
-
+        UserCount = 0;
         orderListCount=0;
 
         loadingLayout = findViewById(R.id.loadingLayout);
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             //db 연결
+            getUserInfo();
             getDate();
 
 
@@ -112,18 +113,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             //db연결
+            getUserInfo();
             getDate();
 
 
         }
-
-
-
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     public boolean tabSelect(MenuItem item){
@@ -140,11 +134,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:return false;
         }
     }
+    private void getUserInfo(){
+        DatabaseReference ref = database.getReference("users");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                snapshot.getChildrenCount();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String userId = dataSnapshot.getKey();
+                    User user = dataSnapshot.getValue(User.class);
+                    users.add(new UserId(userId,user));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     private void getDate(){
-        Log.d("MainOrderList DB", "getDate called");
 
         if(android.os.Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+
             LocalDateTime now = LocalDateTime.now();
             ZonedDateTime zonedDateTime = ZonedDateTime.of(now, ZoneId.of("Asia/Seoul"));
 
@@ -160,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dateFormat.setTimeZone(tz);
 
             String today = dateFormat.format(now);
+            Log.d("MainOrderList DB", "today "+today);
 
             getOrderListCount(today);
 
@@ -167,15 +182,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getOrderListCount(String today){
-        Log.d("MainOrderList DB", "getOrderListCount called");
+        Log.d("MainOrderList DB", "getOrderListCount called "+today);
         DatabaseReference ref = database.getReference("orderList");
-        ref.orderByChild("orderDate").equalTo(today).addValueEventListener(new ValueEventListener() {
+        ref.orderByChild("orderDate").equalTo(today).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long size = snapshot.getChildrenCount();
-                Log.d("MainOrderList DB", "size "+size);
-                getOrderList(today,size);
 
+                long size = snapshot.getChildrenCount();
+                Log.d("MainOrderList DB", "datachage 1 called");
+                Log.d("MainOrderList DB", "size "+size);
+
+                if(size>0) {
+
+                    getOrderList(today, size);
+                }else{
+                    loadingLayout.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -187,20 +209,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getOrderList(String today,long size){
         if(size>=0) {
-            Log.d("MainOrderList DB", "getOrderList called");
-
+            Log.d("MainOrderList DB", "getOrderList called size "+size);
             DatabaseReference ref = database.getReference("orderList");
             ref.orderByChild("orderDate").equalTo(today).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    Log.d("MainOrderList DB", "childadd called1");
 
+                    String orderId = snapshot.getKey();
                     Order order = snapshot.getValue(Order.class);
                     String ordercompletedTime = order.getOrderCompletedTime();
                     String userId = order.getUserId();
 
-                    if (!ordercompletedTime.equals("") || ordercompletedTime != "") {
-                        Log.d("MainOrderList DB", "getUserInfo start");
-                        getUserInfo(order, userId, size);
+                    if (ordercompletedTime.equals("") || ordercompletedTime == "") {
+                        Log.d("MainOrderList DB", "matchUser start");
+                        matchUser(order, orderId, userId);
                     } else {
                         loadingLayout.setVisibility(View.GONE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, homeFragment).commit();
@@ -211,6 +234,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    Log.d("MainOrderList DB", "changed3 called");
+
+
+                        String orderId = snapshot.getKey();
+                        Order order = snapshot.getValue(Order.class);
+                        String orderAcceptedTime = order.getOrderAcceptedTime();
+                        String ordercompletedTime = order.getOrderCompletedTime();
+
+
+
+                            if (ordercompletedTime.equals("") || ordercompletedTime == ""){
+                                int position = HomeFragment.selectPosition;
+                                Log.d("position22","position "+position);
+
+                                if(position>-1){
+                                    try {
+                                        OrderClient orderClient = homeFragment.getItems();
+                                        String customerName = orderClient.getCustomerName();
+                                        String customerPhoneNumber = orderClient.getCustomerPhoneNumber();
+                                        if (!orderAcceptedTime.equals("") || orderAcceptedTime != "") {
+                                            Log.d("MainOrderList DB", "matchUser start");
+                                            homeFragment.acceptedOrderChange(new OrderClient(customerName,customerPhoneNumber,orderId,order));
+                                        } else {
+                                            getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, homeFragment).commit();
+                                        }
+                                    }catch (IndexOutOfBoundsException e){
+                                        Log.d("position22","오류남 힝힝 "+e);
+                                    }
+                                }else {
+                                    Log.d("MainOrderList DB", "전부 완료된 주문");
+                                }
+
+                            }else{
+                                int position = HomeFragment.selectPosition;
+                                homeFragment.deleteOrder(position);
+                            }
+
                 }
 
                 @Override
@@ -233,54 +293,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void getUserInfo(Order order, String userId, long size){
-        Log.d("MainOrderList DB", "getUserInfo called");
+    private void matchUser(Order order,String orderId, String userIds){
+        Log.d("MainOrderList DB", "matchUser called");
+        OrderClient orderClient =null;
+        if(users.size()>0) {
+            for (UserId userId : users){
 
+                String userId_item = userId.getUserId();
+                User user_item = userId.getUser();
+                String userName = user_item.getUserName();
+                String userPhoneNumber = user_item.getUserPhoneNumber();
 
-        DatabaseReference ref = database.getReference("users");
-        ref.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                String UserId = snapshot.getKey();
-                Log.d("MainOrderList DB", "userid  읽어옴"+UserId+", "+userId);
-
-                if(UserId.equals(userId)){
-                    Log.d("MainOrderList DB", "userid  일치");
-                    User user = snapshot.getValue(User.class);
-                    String customerName = user.getUserName();
-                    String customerPhoneNumber = user.getUserPhoneNumber();
-                    orderLists.add(new OrderClient(customerName,customerPhoneNumber,order));
-
-                    orderListCount+=1;
-                }else{
-                    Log.d("MainOrderList DB", "userid  불일치");
+                if(userId_item.equals(userIds) || userId_item ==userIds){
+                    orderClient = new OrderClient(userName,userPhoneNumber,orderId,order);
+                    orderLists.add(orderClient);
+                    Log.d("MainOrderList DB", "matchUser orderLsits add "+userName);
                 }
-
-                if(orderListCount==size){
-                    Log.d("MainOrderList DB", "count==size");
-                    homeFragment.setOrderList(orderLists);
-                    orderListCount=0;
-//                    orderLists.clear();
-                    loadingLayout.setVisibility(View.GONE);
-                }
-
-
             }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
+            homeFragment.setList(orderLists);
+            loadingLayout.setVisibility(View.GONE);
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) { }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("MainOrderList DB", "getuserInfo 에러 "+error);
-            }
-        });
+        }
     }
+
+
 
 }

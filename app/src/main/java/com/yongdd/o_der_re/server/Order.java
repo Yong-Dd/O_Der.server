@@ -10,10 +10,11 @@ public class Order {
    String orderReceivedTime;
    String orderAcceptedTime;
    String orderCompletedTime;
+   String orderMemo;
 
    public Order(){}
 
-    public Order(String userId, ArrayList<Payment> orderMenus, int totalPrice, String orderDate, String orderReceivedTime, String orderAcceptedTime, String orderCompletedTime) {
+    public Order(String userId, ArrayList<Payment> orderMenus, int totalPrice, String orderDate, String orderReceivedTime, String orderAcceptedTime, String orderCompletedTime, String orderMemo) {
         this.userId = userId;
         this.orderMenus = orderMenus;
         this.totalPrice = totalPrice;
@@ -21,6 +22,15 @@ public class Order {
         this.orderReceivedTime = orderReceivedTime;
         this.orderAcceptedTime = orderAcceptedTime;
         this.orderCompletedTime = orderCompletedTime;
+        this.orderMemo = orderMemo;
+    }
+
+    public String getOrderMemo() {
+        return orderMemo;
+    }
+
+    public void setOrderMemo(String orderMemo) {
+        this.orderMemo = orderMemo;
     }
 
     public String getUserId() {
