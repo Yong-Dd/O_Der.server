@@ -93,7 +93,7 @@ public class HomeFragment extends Fragment {
     }
 
     public void acceptedOrderChange(OrderClient orderClient){
-
+        orderClients.set(selectPosition,orderClient);
         orderListAdapter.updateItem(selectPosition,orderClient);
         orderListRecyclerView.setAdapter(orderListAdapter);
         orderListAdapter.notifyItemChanged(selectPosition);
