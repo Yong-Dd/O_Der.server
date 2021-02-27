@@ -1,8 +1,11 @@
 package com.yongdd.o_der_re.server;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +44,7 @@ public class MenuEditFragment extends Fragment implements View.OnClickListener {
     static ImageView menuImage;
     static EditText menuNameText, menuPriceText;
     static Spinner menuDelimiterSpinner, menuHotIceSpinner;
-    Button menuEditButton, xButton;
+    Button menuEditButton, xButton, menuDeleteButton;
 
     static Context context;
 
@@ -75,10 +78,12 @@ public class MenuEditFragment extends Fragment implements View.OnClickListener {
         menuDelimiterSpinner = (Spinner) view.findViewById(R.id.ME_menuDelimiterSpinner);
         menuHotIceSpinner = (Spinner) view.findViewById(R.id.ME_hotIceSpinner);
         menuEditButton = view.findViewById(R.id.ME_menuEditButton);
+        menuDeleteButton = view.findViewById(R.id.ME_menuDeleteButton);
 
         menuEditButton.setOnClickListener(this);
         menuImage.setOnClickListener(this);
         xButton.setOnClickListener(this);
+        menuDeleteButton.setOnClickListener(this);
 
         //menu delimiter spinner listener
         menuDelimiterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -102,8 +107,6 @@ public class MenuEditFragment extends Fragment implements View.OnClickListener {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-
-
         return view;
     }
 
@@ -113,7 +116,7 @@ public class MenuEditFragment extends Fragment implements View.OnClickListener {
         Menu menu = menuUri.getMenu();
 
         //해당 menu content
-        Uri uri = menuUri.getUri();
+        ImageUri = menuUri.getUri();
         menuId = menu.getMenuId();
         menuDelimiter = menu.getMenuDelimiter();
         String menuName = menu.getMenuName();
@@ -122,11 +125,11 @@ public class MenuEditFragment extends Fragment implements View.OnClickListener {
         int menuPrice = menu.getMenuPrice();
 
         Log.d("menuChoice","MenuEditFragemnt setItem menuName "+menuName+", "+menuPrice);
-        Log.d("menuChoice","MenuEditFragment setItem uri "+uri==null?"null":"not null");
+        Log.d("menuChoice","MenuEditFragment setItem uri "+ImageUri==null?"null":"not null");
 
         //이미지 설정
-        if(uri!=null){
-            Glide.with(context).load(uri).into(menuImage);
+        if(ImageUri!=null){
+            Glide.with(context).load(ImageUri).into(menuImage);
         }else{
             menuImage.setImageResource(R.drawable.standard_img);
         }
@@ -163,20 +166,23 @@ public class MenuEditFragment extends Fragment implements View.OnClickListener {
             Log.d("menuChoice","image 선택 시작");
         }else if(v==menuEditButton){
             if(imageChange){
-//                ImageUpload();
+                ImageUpload(ImageUri, ImagePath);
             }else{
                 editMenuUpdate(ImagePath);
             }
         }else if(v==xButton){
             menuFragment.menuEditShow(false);
+        }else if(v==menuDeleteButton){
+            menuDeleteRequest(menuId);
         }
+
     }
 
     public void onActivityResult(Uri uri,String ImgPath, String ImgName){
         Log.d("menuChoice","image edit fragment activity called & imgPath "+ImgPath);
         imageChange =true;
 
-
+        ImageUri = uri;
         menuImage.setImageURI(uri);
         Log.d("menuChoice","image edit fragment setImageUri");
         realImagePath = ImgPath;
@@ -235,6 +241,51 @@ public class MenuEditFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+    }
+
+    private void menuDeleteRequest(int menu_Id){
+        String menu_id = Integer.toString(menu_Id);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("메뉴를 삭제하시겠습니까?")
+                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference ref = database.getReference("menus/"+menu_id);
+                        ref.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                menuFragment.menuEditShow(false);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("menuDelete","메뉴 삭제 실패");
+                                Toast.makeText(getContext(),"메뉴를 삭제하는데 실패했습니다.",Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        });
+
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+
+        dialog.setOnShowListener( new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.rgb(43,144,217));
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+            }
+        });
+        dialog.show();
     }
 
 }

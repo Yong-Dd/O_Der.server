@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class MenuFragment extends Fragment {
     private static FrameLayout menuEditLayout, menuAddLayout;
-    Button menuAddButton;
+    Button menuAddButton, refreshButton;
 
     static RecyclerView menuRecyclerView;
     static MenuAdapter menuAdapter;
@@ -75,6 +75,22 @@ public class MenuFragment extends Fragment {
         menuRecyclerView.setHasFixedSize(true);
         menuRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         allMenuSetting();
+
+        //refresh
+        refreshButton = view.findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = menuListAdapter.lastClickedPosition;
+                if(position>-1){
+                    menuChoice(position);
+                }else{
+                    menuAdapter.clearItem();
+                    allMenuSetting();
+                }
+
+            }
+        });
 
 
 
@@ -169,6 +185,11 @@ public class MenuFragment extends Fragment {
             menuChoice(lastClickedMenu);
         }
 
+    }
+
+    public void deleteMenu(){
+        menus = MainActivity.menus;
+        menuChoice(lastClickedMenu);
     }
 
     public void reloadView(){

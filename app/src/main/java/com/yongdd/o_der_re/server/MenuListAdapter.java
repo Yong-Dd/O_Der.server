@@ -18,12 +18,14 @@ import static androidx.appcompat.content.res.AppCompatResources.getColorStateLis
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuViewHolder> {
     ArrayList<String> menuLists = new ArrayList<>();
     Context context;
+    int lastClickedPosition;
 
     private int mLastClickedPosition = Integer.MIN_VALUE;
     @NonNull
     @Override
     public MenuViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
+        lastClickedPosition = -1;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.menu_list,parent,false);
         context = parent.getContext();
@@ -69,6 +71,7 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
+                    lastClickedPosition = position;
                     Log.d("editMenu","menuAdapter adapter position " +position);
                     if (position != RecyclerView.NO_POSITION) {
                         toggleButton(position);

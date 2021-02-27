@@ -351,7 +351,9 @@ public class MainActivity extends AppCompatActivity  {
             }
 
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) { }
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                deleteMenu(Integer.parseInt(snapshot.getKey()));
+            }
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
@@ -364,22 +366,27 @@ public class MainActivity extends AppCompatActivity  {
     public void getMenuImgUri(Menu menu,int menuId){
 
         String imgPath = menu.getMenuImgPath();
+        if(imgPath.equals("") || imgPath == ""){
+            menus.add(new MenuUri(new Menu(menuId,menu.getMenuDelimiter(),menu.getMenuHotIce(),menu.getMenuImgPath(),
+                    menu.getMenuName(),menu.getMenuPrice()),null));
+        }else{
+            FirebaseStorage storage = FirebaseStorage.getInstance("gs://oder-e6555.appspot.com");
+            StorageReference storageRef = storage.getReference();
+            storageRef.child(imgPath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    menus.add(new MenuUri(new Menu(menuId,menu.getMenuDelimiter(),menu.getMenuHotIce(),menu.getMenuImgPath(),
+                            menu.getMenuName(),menu.getMenuPrice()),uri));
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    menus.add(new MenuUri(new Menu(menuId,menu.getMenuDelimiter(),menu.getMenuHotIce(),menu.getMenuImgPath(),
+                            menu.getMenuName(),menu.getMenuPrice()),null));
+                }
+            });
+        }
 
-        FirebaseStorage storage = FirebaseStorage.getInstance("gs://oder-e6555.appspot.com");
-        StorageReference storageRef = storage.getReference();
-        storageRef.child(imgPath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                menus.add(new MenuUri(new Menu(menuId,menu.getMenuDelimiter(),menu.getMenuHotIce(),menu.getMenuImgPath(),
-                        menu.getMenuName(),menu.getMenuPrice()),uri));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                menus.add(new MenuUri(new Menu(menuId,menu.getMenuDelimiter(),menu.getMenuHotIce(),menu.getMenuImgPath(),
-                        menu.getMenuName(),menu.getMenuPrice()),null));
-            }
-        });
     }
 
     public void getMenuImgUriChange(Menu menu, int menuId){
@@ -411,6 +418,20 @@ public class MainActivity extends AppCompatActivity  {
                 }
             }
         });
+    }
+
+    public void deleteMenu(int menuId){
+        Log.d("deleteMenu","Mainactivity menu remove size start"+ menus.size());
+        for(int i=0; i<menus.size(); i++) {
+            int menu_id = menus.get(i).getMenu().getMenuId();
+            if(menu_id==menuId) {
+                Log.d("deleteMenu","Mainactivity menu remove "+i);
+
+                menus.remove(i);
+                menuFragment.deleteMenu();
+                Log.d("deleteMenu","Mainactivity menu remove size end"+ menus.size());
+            }
+        }
     }
 
 
