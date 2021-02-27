@@ -5,17 +5,24 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.loader.content.CursorLoader;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +30,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -42,11 +51,16 @@ public class MainActivity extends AppCompatActivity  {
     ManagementFragment managementFragment;
     MenuFragment menuFragment;
 
-    static String name;
+
     static ArrayList<OrderClient> orderLists = new ArrayList<>();
     ArrayList<UserId> users = new ArrayList<>();
+    public static ArrayList<MenuUri> menus = new ArrayList<>();
+
+    static String name;
     int orderListCount;
     int UserCount;
+    static boolean menuAddClicked;
+    static boolean menuEditClicked;
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -55,6 +69,8 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);;
 
+        menuAddClicked = false;
+        menuEditClicked = false;
         UserCount = 0;
         orderListCount=0;
 
@@ -118,6 +134,9 @@ public class MainActivity extends AppCompatActivity  {
 
 
         }
+
+        //메뉴 가져오기
+        getMenuDB();
     }
 
     public boolean tabSelect(MenuItem item){
@@ -145,7 +164,6 @@ public class MainActivity extends AppCompatActivity  {
                     User user = dataSnapshot.getValue(User.class);
                     users.add(new UserId(userId,user));
                 }
-
             }
 
             @Override
@@ -201,9 +219,7 @@ public class MainActivity extends AppCompatActivity  {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
@@ -274,12 +290,10 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
                 @Override
-                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-                }
+                public void onChildRemoved(@NonNull DataSnapshot snapshot) { }
 
                 @Override
-                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                }
+                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -317,6 +331,141 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    public void getMenuDB(){
+        DatabaseReference ref = database.getReference("menus");
+        ref.orderByChild("menuDelimiter").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Menu menu = snapshot.getValue(Menu.class);
+                getMenuImgUri(menu,Integer.parseInt(snapshot.getKey()));
 
+                Log.d("menuDB","size  "+menus.size());
+                Log.d("menuDB","id  "+snapshot.getKey());
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Menu menu = snapshot.getValue(Menu.class);
+                getMenuImgUriChange(menu,Integer.parseInt(snapshot.getKey()));
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) { }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) { }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+    }
+
+    public void getMenuImgUri(Menu menu,int menuId){
+
+        String imgPath = menu.getMenuImgPath();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://oder-e6555.appspot.com");
+        StorageReference storageRef = storage.getReference();
+        storageRef.child(imgPath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                menus.add(new MenuUri(new Menu(menuId,menu.getMenuDelimiter(),menu.getMenuHotIce(),menu.getMenuImgPath(),
+                        menu.getMenuName(),menu.getMenuPrice()),uri));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                menus.add(new MenuUri(new Menu(menuId,menu.getMenuDelimiter(),menu.getMenuHotIce(),menu.getMenuImgPath(),
+                        menu.getMenuName(),menu.getMenuPrice()),null));
+            }
+        });
+    }
+
+    public void getMenuImgUriChange(Menu menu, int menuId){
+
+        String imgPath = menu.getMenuImgPath();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://oder-e6555.appspot.com");
+        StorageReference storageRef = storage.getReference();
+        storageRef.child(imgPath).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                for(int i=0; i<menus.size(); i++) {
+                    int menu_id = menus.get(i).getMenu().getMenuId();
+                    if(menu_id==menuId) {
+                        menus.set(i,new MenuUri(menu,uri));
+                        menuFragment.updateItem(i,new MenuUri(menu,uri));
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(getApplicationContext(),"수정된 메뉴를 새로 불러오는데 실패했습니다.",Toast.LENGTH_SHORT).show();
+                for(int i=0; i<menus.size(); i++) {
+                    int menu_id = menus.get(i).getMenu().getMenuId();
+                    if(menu_id==menu_id) {
+                        menus.set(i,new MenuUri(menu,null));
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+                if(resultCode==RESULT_OK){
+                    if(menuEditClicked) {
+                        menuEditClicked = false;
+                        Uri uri = data.getData();
+                        if (uri != null) {
+                            MenuEditFragment menuEditFragment = new MenuEditFragment();
+                            menuEditFragment.onActivityResult(uri, getRealPathFromUri(uri), getImageNameToUri(uri));
+                        }
+                    }else if(menuAddClicked){
+                        menuAddClicked = false;
+                        Uri uri = data.getData();
+                        if (uri != null) {
+                            Log.d("menuChoice", "image uri null");
+                            MenuAddFragment menuAddFragment = new MenuAddFragment();
+                            menuAddFragment.onActivityResult(uri, getRealPathFromUri(uri), getImageNameToUri(uri));
+                        }
+
+                    }
+                }else{
+                    menuEditClicked = false;
+                    menuAddClicked = false;
+                }
+    }
+
+    protected String getRealPathFromUri(Uri uri){
+        String[] proj = {MediaStore.Images.Media.DATA};
+        CursorLoader loader = new CursorLoader(this,uri,proj,null,null,null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+
+        return result;
+    }
+
+    public String getImageNameToUri(Uri data){
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(data, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+        cursor.moveToFirst();
+
+        String imgPath = cursor.getString(column_index);
+        String imgName = imgPath.substring(imgPath.lastIndexOf("/")+1);
+
+        return imgName;
+    }
 
 }

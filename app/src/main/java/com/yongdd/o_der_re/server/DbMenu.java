@@ -1,20 +1,13 @@
 package com.yongdd.o_der_re.server;
 
-public class Menu {
-    int menuId;
+public class DbMenu {
     int menuDelimiter;
     String menuName;
     int menuPrice;
     int menuHotIce;
     String menuImgPath;
 
-
-    public Menu(){
-
-    }
-
-    public Menu(int menuId, int menuDelimiter, int menuHotIce, String menuImgPath, String menuName, int menuPrice ) {
-        this.menuId = menuId;
+    public DbMenu(int menuDelimiter, String menuName, int menuPrice, int menuHotIce, String menuImgPath) {
         this.menuDelimiter = menuDelimiter;
         this.menuName = menuName;
         this.menuPrice = menuPrice;
@@ -22,12 +15,12 @@ public class Menu {
         this.menuImgPath = menuImgPath;
     }
 
-    public int getMenuId() {
-        return menuId;
+    public int getMenuDelimiter() {
+        return menuDelimiter;
     }
 
-    public void setMenuId(int menuId) {
-        this.menuId = menuId;
+    public void setMenuDelimiter(int menuDelimiter) {
+        this.menuDelimiter = menuDelimiter;
     }
 
     public String getMenuName() {
@@ -61,12 +54,4 @@ public class Menu {
     public void setMenuImgPath(String menuImgPath) {
         this.menuImgPath = menuImgPath;
     }
-    public int getMenuDelimiter() {
-        return menuDelimiter;
-    }
-
-    public void setMenuDelimiter(int menuDelimiter) {
-        this.menuDelimiter = menuDelimiter;
-    }
-
 }

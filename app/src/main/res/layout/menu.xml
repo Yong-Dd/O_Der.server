@@ -54,7 +54,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
@@ -65,17 +65,9 @@
                 android:id="@+id/M_menuEditButton"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_marginBottom="10dp"
                 android:background="@drawable/ic_baseline_settings_24"
-                app:backgroundTint="@color/mainColor" />
+                app:backgroundTint="@color/lightColor" />
 
-            <Button
-                android:id="@+id/M_menuDeleteButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_weight="0.3"
-                android:background="@drawable/ic_baseline_clear_24"
-                app:backgroundTint="@color/mainColor" />
         </LinearLayout>
 
     </LinearLayout>

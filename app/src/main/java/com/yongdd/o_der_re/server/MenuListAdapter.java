@@ -2,6 +2,7 @@ package com.yongdd.o_der_re.server;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import static androidx.appcompat.content.res.AppCompatResources.getColorStateLis
 public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuViewHolder> {
     ArrayList<String> menuLists = new ArrayList<>();
     Context context;
+
     private int mLastClickedPosition = Integer.MIN_VALUE;
     @NonNull
     @Override
@@ -67,10 +69,10 @@ public class MenuListAdapter extends RecyclerView.Adapter<MenuListAdapter.MenuVi
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
+                    Log.d("editMenu","menuAdapter adapter position " +position);
                     if (position != RecyclerView.NO_POSITION) {
-
                         toggleButton(position);
-//                        menuFragment.menuChoice(position);
+                        menuFragment.menuChoice(position);
                     }
 
                 }

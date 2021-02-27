@@ -6,17 +6,17 @@
             <solid
                 android:color="@color/mainColor"
                 />
-            <size android:width="90dp" android:height="90dp"/>
+            <size android:width="50dp" android:height="50dp"/>
 
-            <corners android:bottomLeftRadius="90dp"
-                android:topLeftRadius="90dp"
-                android:bottomRightRadius="90dp"
-                android:topRightRadius="90dp"
+            <corners android:bottomLeftRadius="100dp"
+                android:topLeftRadius="100dp"
+                android:bottomRightRadius="100dp"
+                android:topRightRadius="100dp"
                 />
         </shape>
     </item>
 
-    <item android:top="20dp" android:bottom="20dp" android:right="20dp" android:left="20dp">
+    <item android:top="10dp" android:bottom="10dp" android:right="10dp" android:left="10dp">
         <shape android:shape="line">
         <stroke
             android:width="5dp"
@@ -28,7 +28,7 @@
 
         </shape>
     </item>
-    <item android:top="20dp" android:bottom="20dp" android:right="20dp" android:left="20dp">
+    <item android:top="10dp" android:bottom="10dp" android:right="10dp" android:left="10dp">
         <rotate
             android:fromDegrees="90"
             android:toDegrees="90"
