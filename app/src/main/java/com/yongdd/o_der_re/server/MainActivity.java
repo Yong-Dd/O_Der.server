@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
     static ArrayList<OrderClient> orderLists = new ArrayList<>();
-    ArrayList<UserId> users = new ArrayList<>();
+    static ArrayList<UserId> users = new ArrayList<>();
     public static ArrayList<MenuUri> menus = new ArrayList<>();
 
     static String name;
@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity  {
     int UserCount;
     static boolean menuAddClicked;
     static boolean menuEditClicked;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity  {
         menuEditClicked = false;
         UserCount = 0;
         orderListCount=0;
+
 
         loadingLayout = findViewById(R.id.loadingLayout);
 

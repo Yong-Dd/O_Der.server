@@ -142,7 +142,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             customerName.setText(orderClient.getCustomerName());
             customerPhoneNumber.setText(orderClient.getCustomerPhoneNumber());
 
-
+            Log.d("orderListChecked","OrderListAdapter orderDate "+orderDate.getText().toString());
             //프로그래스바 & 버튼 세팅
             if(orderAcceptedTime==""||orderAcceptedTime.equals("")){
                 orderAcceptedButton.setVisibility(View.VISIBLE);
