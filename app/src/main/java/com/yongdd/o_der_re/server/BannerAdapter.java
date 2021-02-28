@@ -51,6 +51,10 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         return banners.get(position);
     }
 
+    public void clearItem(){banners.clear();}
+
+    public void updateItem(int position,BannerUri bannerUri){banners.set(position,bannerUri);}
+
 
     public class BannerViewHolder extends RecyclerView.ViewHolder{
         TextView menuTitle;

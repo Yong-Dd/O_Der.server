@@ -25,6 +25,9 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".SalesManagement"/>
+        <activity android:name=".OrderListManagement"/>
+        <activity android:name=".BannerManagement"/>
     </application>
 
 </manifest>

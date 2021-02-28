@@ -101,6 +101,14 @@ public class MenuAddFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if(v==xButton){
             menuFragment.menuAddShow(false);
+            menuNameText.setText("");
+            menuPriceText.setText("");
+            menuHotIceSpinner.setSelection(0);
+            menuDelimiterSpinner.setSelection(0);
+            imageUri = null;
+            imageChoice = false;
+            menuDelimiter=1;
+            menuHotIce=1;
         }else if(v==menuAddButton){
             if(imageUri!=null){
                 ImageUpload(imageUri,imageName);
