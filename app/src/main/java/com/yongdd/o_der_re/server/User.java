@@ -5,14 +5,24 @@ public class User {
     String userName;
     String userPhoneNumber;
     int userStamp;
+    String userToken;
 
     public User(){}
 
-    public User(String userEmail, String userName, String userPhoneNumber, int userStamp) {
+    public User(String userEmail, String userName, String userPhoneNumber, int userStamp, String userToken) {
         this.userEmail = userEmail;
         this.userName = userName;
         this.userPhoneNumber = userPhoneNumber;
         this.userStamp = userStamp;
+        this.userToken = userToken;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
     }
 
     public int getUserStamp() {

@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.service.autofill.UserData;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +27,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +46,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class OrderListManagement extends AppCompatActivity implements View.OnClickListener {
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
     static Button todayButton, oneDayAgoButton, twoDayAgoButton, backButton;
     ConstraintLayout loadingLayout;
     LinearLayout noneOrderLayout;
@@ -311,4 +319,50 @@ public class OrderListManagement extends AppCompatActivity implements View.OnCli
        // getOrderList(0,todayButton.getText().toString());
 
     }
+    private void sendNotification(String email, String message){
+        final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
+        final String SERVER_KEY = "AAAA9EetdA4:APA91bFoaEw-hzCziWA36z1UCer2KmJC06W0gE5s2Vn6YIba1HIMVkqjN0TaLZsz1YA-BDeF-4ZrNU2ENQRM0aFGPtAFTdnbizrhvgBV5o36ED-Tli-PcVyecP9RGKZOIT-K5phMHgYz";
+
+        database.getReference("users").child("userEmail").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final User user = dataSnapshot.getValue(User.class);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            // FMC 메시지 생성 start
+                            JSONObject root = new JSONObject();
+                            JSONObject notification = new JSONObject();
+                            notification.put("body", message);
+                            notification.put("title", "O:Der");
+                            root.put("notification", notification);
+                            root.put("to", user.getUserToken());
+
+                            // FMC 메시지 생성 end
+                            URL Url = new URL(FCM_MESSAGE_URL);
+                            HttpURLConnection conn = (HttpURLConnection) Url.openConnection();
+                            conn.setRequestMethod("POST");
+                            conn.setDoOutput(true);
+                            conn.setDoInput(true);
+                            conn.addRequestProperty("Authorization", "key=" + SERVER_KEY);
+                            conn.setRequestProperty("Accept", "application/json");
+                            conn.setRequestProperty("Content-type", "application/json");
+                            OutputStream os = conn.getOutputStream();
+                            os.write(root.toString().getBytes("utf-8"));
+                            os.flush();
+                            conn.getResponseCode();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
+
+    }
+
 }
