@@ -3,14 +3,24 @@ package com.yongdd.o_der_re.server;
 public class OrderClient {
     String customerName;
     String customerPhoneNumber;
+    String customerEmail;
     String orderId;
     Order order;
 
-    public OrderClient(String customerName, String customerPhoneNumber, String orderId, Order order) {
+    public OrderClient(String customerName, String customerPhoneNumber, String customerEmail, String orderId, Order order) {
         this.customerName = customerName;
         this.customerPhoneNumber = customerPhoneNumber;
+        this.customerEmail = customerEmail;
         this.orderId = orderId;
         this.order = order;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
 
     public String getOrderId() {

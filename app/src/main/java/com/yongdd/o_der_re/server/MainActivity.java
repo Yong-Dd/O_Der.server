@@ -271,9 +271,10 @@ public class MainActivity extends AppCompatActivity  {
                                         OrderClient orderClient = homeFragment.getItems();
                                         String customerName = orderClient.getCustomerName();
                                         String customerPhoneNumber = orderClient.getCustomerPhoneNumber();
+                                        String customerEmail = orderClient.getCustomerEmail();
                                         if (!orderAcceptedTime.equals("") || orderAcceptedTime != "") {
                                             Log.d("MainOrderList DB", "matchUser start");
-                                            homeFragment.acceptedOrderChange(new OrderClient(customerName,customerPhoneNumber,orderId,order));
+                                            homeFragment.acceptedOrderChange(new OrderClient(customerName,customerPhoneNumber,customerEmail,orderId,order));
                                         } else {
                                             getSupportFragmentManager().beginTransaction().replace(R.id.mainContainer, homeFragment).commit();
                                         }
@@ -319,9 +320,10 @@ public class MainActivity extends AppCompatActivity  {
                 User user_item = userId.getUser();
                 String userName = user_item.getUserName();
                 String userPhoneNumber = user_item.getUserPhoneNumber();
+                String userEmail = user_item.getUserEmail();
 
                 if(userId_item.equals(userIds) || userId_item ==userIds){
-                    orderClient = new OrderClient(userName,userPhoneNumber,orderId,order);
+                    orderClient = new OrderClient(userName,userPhoneNumber,userEmail,orderId,order);
                     orderLists.add(orderClient);
                     Log.d("MainOrderList DB", "matchUser orderLsits add "+userName);
                 }

@@ -233,9 +233,10 @@ public class OrderListManagement extends AppCompatActivity implements View.OnCli
                 User user_item = userId.getUser();
                 String userName = user_item.getUserName();
                 String userPhoneNumber = user_item.getUserPhoneNumber();
+                String userEmail = user_item.getUserEmail();
 
                 if(userId_item.equals(userIds) || userId_item ==userIds){
-                    orderClient = new OrderClient(userName,userPhoneNumber,orderId,order);
+                    orderClient = new OrderClient(userName,userPhoneNumber,userEmail,orderId,order);
                     Log.d(TAG,"matchUser  일치 user "+userIds);
                     orderLists.add(orderClient);
                 }
@@ -319,14 +320,24 @@ public class OrderListManagement extends AppCompatActivity implements View.OnCli
        // getOrderList(0,todayButton.getText().toString());
 
     }
-    private void sendNotification(String email, String message){
+    public void sendNotification(String email, String message){
         final String FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send";
         final String SERVER_KEY = "AAAA9EetdA4:APA91bFoaEw-hzCziWA36z1UCer2KmJC06W0gE5s2Vn6YIba1HIMVkqjN0TaLZsz1YA-BDeF-4ZrNU2ENQRM0aFGPtAFTdnbizrhvgBV5o36ED-Tli-PcVyecP9RGKZOIT-K5phMHgYz";
 
-        database.getReference("users").child("userEmail").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference ref = database.getReference("users");
+        ref.orderByChild("userEmail").equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                final User user = dataSnapshot.getValue(User.class);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = null;
+                for (DataSnapshot child: snapshot.getChildren()) {
+                     user = child.getValue(User.class);
+                    Log.d("token",user.getUserName());
+                    Log.d("token",user.getUserEmail());
+                    Log.d("token",user.getUserToken());
+                }
+
+
+                User finalUser = user;
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -334,10 +345,10 @@ public class OrderListManagement extends AppCompatActivity implements View.OnCli
                             // FMC 메시지 생성 start
                             JSONObject root = new JSONObject();
                             JSONObject notification = new JSONObject();
-                            notification.put("body", message);
                             notification.put("title", "O:Der");
+                            notification.put("body", message);
                             root.put("notification", notification);
-                            root.put("to", user.getUserToken());
+                            root.put("to", finalUser.getUserToken());
 
                             // FMC 메시지 생성 end
                             URL Url = new URL(FCM_MESSAGE_URL);

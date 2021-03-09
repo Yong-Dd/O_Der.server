@@ -37,6 +37,7 @@ import java.util.TimeZone;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
     ArrayList<OrderClient> orderLists = new ArrayList<>();
     Context context;
+    OrderListManagement orderListManagement = new OrderListManagement();
 
     @NonNull
     @Override
@@ -207,7 +208,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
                             OrderClient orderClient = getItem(position);
                             String orderId = orderClient.getOrderId();
 
-
+                            //db수정
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference ref = database.getReference("orderList/"+orderId+"/orderAcceptedTime");
                             ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -225,6 +226,10 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
                                 }
                             });
+
+                            //알람 전달
+                            orderListManagement.sendNotification(orderClient.getCustomerEmail(),"주문을 승인하였습니다.");
+
                         }
                     })
                     .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
@@ -254,7 +259,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
                             OrderClient orderClient = getItem(position);
                             String orderId = orderClient.getOrderId();
 
-
+                            //db수정
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference ref = database.getReference("orderList/"+orderId+"/orderCompletedTime");
                             ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -272,6 +277,9 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
                                 }
                             });
+
+                            //알람 전달
+                            orderListManagement.sendNotification(orderClient.getCustomerEmail(),"주문하신 메뉴를 완료했습니다.");
                         }
                     })
                     .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
