@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity  {
     int UserCount;
     static boolean menuAddClicked;
     static boolean menuEditClicked;
+    static boolean firstZero;
 
 
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity  {
 
         menuAddClicked = false;
         menuEditClicked = false;
+        firstZero = false;
         UserCount = 0;
         orderListCount=0;
 
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
-    private void getDate(){
+    public void getDate(){
 
         if(android.os.Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
 
@@ -213,9 +215,10 @@ public class MainActivity extends AppCompatActivity  {
                 Log.d("MainOrderList DB", "size "+size);
 
                 if(size>0) {
-
+                    firstZero = false;
                     getOrderList(today, size);
                 }else{
+                    firstZero = true;
                     loadingLayout.setVisibility(View.GONE);
                 }
             }
@@ -233,6 +236,8 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                     Log.d("MainOrderList DB", "childadd called1");
+
+                    firstZero = false;
 
                     String orderId = snapshot.getKey();
                     Order order = snapshot.getValue(Order.class);
