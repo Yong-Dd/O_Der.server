@@ -38,6 +38,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
     ArrayList<OrderClient> orderLists = new ArrayList<>();
     Context context;
     OrderListManagement orderListManagement = new OrderListManagement();
+    HomeFragment homeFragment = new HomeFragment();
 
     @NonNull
     @Override
@@ -228,7 +229,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
                             });
 
                             //알람 전달
-                            orderListManagement.sendNotification(orderClient.getCustomerEmail(),"주문을 승인하였습니다.");
+                            homeFragment.sendNotification(orderClient.getCustomerEmail(),"주문을 승인하였습니다.");
 
                         }
                     })
@@ -279,7 +280,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
                             });
 
                             //알람 전달
-                            orderListManagement.sendNotification(orderClient.getCustomerEmail(),"주문하신 메뉴를 완료했습니다.");
+                            homeFragment.sendNotification(orderClient.getCustomerEmail(),"주문하신 메뉴를 완료했습니다.");
                         }
                     })
                     .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
