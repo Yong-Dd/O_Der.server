@@ -123,6 +123,7 @@ public class HomeFragment extends Fragment {
         if(orderClients.size()==0){
             Log.d("delete Order","사이즈 0임");
             setNoneOrder(false);
+            reloadView();
         }
     }
 

@@ -61,6 +61,7 @@ public class OrderListManagement extends AppCompatActivity implements View.OnCli
     final String TAG = "orderListChecked";
 
 
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -270,7 +271,7 @@ public class OrderListManagement extends AppCompatActivity implements View.OnCli
         }else if(v==twoDayAgoButton){
             buttonClickedSetting(twoDayAgoButton.getText().toString());
         }else if(v==backButton){
-
+            onBackPressed();
         }
     }
 
@@ -319,6 +320,13 @@ public class OrderListManagement extends AppCompatActivity implements View.OnCli
         getMaxOrderCount(date);
        // getOrderList(0,todayButton.getText().toString());
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.page_slide_in_left, R.anim.page_slide_out_right);
     }
 
 
