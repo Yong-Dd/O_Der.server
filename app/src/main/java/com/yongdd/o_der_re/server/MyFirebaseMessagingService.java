@@ -16,7 +16,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import org.json.JSONException;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-
+    MainActivity mainActivity = new MainActivity();
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
@@ -72,12 +72,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
             mManager.notify(0, builder.build());
 
-        //    zeroListReset();
+            zeroListReset();
 
     }
 
     public void zeroListReset(){
-        MainActivity mainActivity = new MainActivity();
         HomeFragment homeFragment = new HomeFragment();
         if(MainActivity.firstZero){
             if(MainActivity.orderLists.size()==0){
