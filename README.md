@@ -1,6 +1,7 @@
 # 카페 주문앱 [O:DER] 
 
 - 유튜브 영상 <https://youtu.be/l3S6u4ITAc4>
+- 고객앱 <https://github.com/Yong-Dd/O_Der.client>
 
 ## 2. 점주앱 (O_Der.server)
 - 로그인(미로그인시 사용 불가능)
