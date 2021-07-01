@@ -24,7 +24,8 @@
 
 ### 2-2 메뉴 추가/수정/삭제
 <img src="https://user-images.githubusercontent.com/71385485/124074414-6b8bf180-da7e-11eb-8168-9c82775010ba.jpg" width="300" height="600" alt="메뉴 메인">
-<img src="https://user-images.githubusercontent.com/71385485/124086848-6afa5780-da8c-11eb-8f66-efb839bc0d80.jpg" width="300" height="600" alt="메뉴 상세">
+<img src="https://user-images.githubusercontent.com/71385485/124087409-ee1bad80-da8c-11eb-8bf7-bd90c4bb2448.jpg" width="300" height="600" alt="메뉴 추가">
+<img src="https://user-images.githubusercontent.com/71385485/124086848-6afa5780-da8c-11eb-8f66-efb839bc0d80.jpg" width="300" height="600" alt="메뉴 ">
 
 ### 2-3 주문 내역
 <img src="https://user-images.githubusercontent.com/71385485/124074467-7b0b3a80-da7e-11eb-817e-43c73b92eff3.jpg" width="300" height="600" alt="주문 내역">
