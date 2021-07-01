@@ -12,7 +12,7 @@
 
 ### 2-1 메인 - 주문 상태(확인)창
 #### 2-1-1 주문 없을시
-<img src="https://user-images.githubusercontent.com/71385485/124086848-6afa5780-da8c-11eb-8f66-efb839bc0d80.jpg" width="300" height="600" alt="main1">
+<img src="https://user-images.githubusercontent.com/71385485/124086887-73529280-da8c-11eb-9e59-e9b55a6b174b.jpg" width="300" height="600" alt="main1">
 
 #### 2-1-2 주문시
 <img src="https://user-images.githubusercontent.com/71385485/124084612-253c8f80-da8a-11eb-98ff-7de2c7f75fec.jpg" width="300" height="600" alt="main2">
