@@ -5,7 +5,7 @@
 ## 2. 점주앱 (O_Der.server)
 - 로그인(미로그인시 사용 불가능)
 - 주문 상태창
-- 메뉴 수정 / 메뉴 삭제
+- 메뉴 추가 / 메뉴 수정 / 메뉴 삭제
 - 푸시 알람 받음(고객 주문시) / 푸시 알람 보냄(주문 확인, 제조 완료)
 - 주문 내역(최근 3일) / 배너 수정 
 
@@ -22,7 +22,7 @@
 <img src="https://user-images.githubusercontent.com/71385485/124084619-28d01680-da8a-11eb-80d2-68b6ae60d396.jpg" width="300" height="600" alt="main3">
 
 
-### 2-2 메뉴 수정 및 삭제창
+### 2-2 메뉴 추가/수정/삭제
 <img src="https://user-images.githubusercontent.com/71385485/124074414-6b8bf180-da7e-11eb-8168-9c82775010ba.jpg" width="300" height="600" alt="메뉴 메인">
 메뉴수정상세
 
